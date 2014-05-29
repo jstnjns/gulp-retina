@@ -1,30 +1,26 @@
+'use strict'
+
+PLUGIN_NAME = 'gulp-retina'
+
 through     = require 'through2'
-img         = require 'imagemagick-stream'
+gm          = require 'gm'
 gutil       = require 'gulp-util'
 
 PluginError = gutil.PluginError
-
-# Cut that bitch in half
-half (file) ->
-  file.pipe(img().scale('50%'))
-
-# Cut that bitch into four
-quartered (file) ->
-  file.pipe(img().scale('25%'))
 
 module.exports = (options = {}) ->
 
   through.obj (file, enc, next) ->
     
-    # @2x
-    if file.relative.match /@2x/ig
-      halved = half file.clone()
-      next null, halved # Pass along "halved" image
+    if file.relative.match /@2x/
+      clone = file.clone()
+      image = gm(clone.contents)
+        .size { bufferStream: true }, (err, size) ->
+          @resize size.width / 2, size.height / 2
+          @write clone.path.replace('@2x', ''), gutil.noop
 
-    # @4x
-    if file.relative.match /@4x/ig
-      quartered = quarter file.clone()
-      next null, quartered # Pass along "quartered" image
+      @push clone
 
-    # Pass the original
-    next null, file
+    # Always pass the original
+    @push file
+    next()
