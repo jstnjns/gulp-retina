@@ -18,19 +18,23 @@
       options = {};
     }
     return through.obj(function(file, enc, next) {
-      var clone, image;
+      var clone, image, stream;
+      stream = this;
       if (file.relative.match(/@2x/)) {
         clone = file.clone();
         image = gm(clone.contents).size({
           bufferStream: true
         }, function(err, size) {
           this.resize(size.width / 2, size.height / 2);
-          return this.write(clone.path.replace('@2x', ''), gutil.noop);
+          return this.toBuffer(function(err, buffer) {
+            clone.contents = buffer;
+            clone.path = clone.path.replace('@2x', '');
+            stream.push(clone);
+            return next();
+          });
         });
-        this.push(clone);
       }
-      this.push(file);
-      return next();
+      return this.push(file);
     });
   };
 
