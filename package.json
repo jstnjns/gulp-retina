@@ -1,0 +1,25 @@
+{
+  "name": "gulp-retina",
+  "version": "0.0.1",
+  "description": "Gulp.js plugin for automating multiple image resolution creation.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:jstnjns/gulp-retina.git"
+  },
+  "keywords": [
+    "gulpplugin",
+    "gulp",
+    "retina",
+    "images"
+  ],
+  "author": "Justin Jones",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "imagemagick-stream": "^1.1.0",
+    "through2": "^0.4.2",
+    "gulp-util": "^2.2.14",
+    "gm": "^1.16.0"
+  }
+}
