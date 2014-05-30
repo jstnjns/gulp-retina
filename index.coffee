@@ -13,6 +13,9 @@ module.exports = (options = {}) ->
   through.obj (file, enc, next) ->
     stream = this
     
+    # Always pass the original
+    @push file
+
     # TODO Dynamic modifiers
     if file.relative.match /@2x/
 
@@ -30,5 +33,5 @@ module.exports = (options = {}) ->
             stream.push clone
             next()
 
-    # Always pass the original
-    @push file
+    else
+      next()

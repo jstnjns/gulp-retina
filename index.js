@@ -20,9 +20,10 @@
     return through.obj(function(file, enc, next) {
       var clone, image, stream;
       stream = this;
+      this.push(file);
       if (file.relative.match(/@2x/)) {
         clone = file.clone();
-        image = gm(clone.contents).size({
+        return image = gm(clone.contents).size({
           bufferStream: true
         }, function(err, size) {
           this.resize(size.width / 2, size.height / 2);
@@ -33,8 +34,9 @@
             return next();
           });
         });
+      } else {
+        return next();
       }
-      return this.push(file);
     });
   };
 
