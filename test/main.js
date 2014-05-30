@@ -15,7 +15,7 @@ describe('gulp-retina', function() {
       retina()
         .on('error', done)
         .on('data', function(file) {
-          String(file.contents).should.equal(fs.readFileSync(expected));
+          String(file.contents).should.equal(String(fs.readFileSync(expected)));
 
           done();
         })
@@ -32,13 +32,13 @@ describe('gulp-retina', function() {
       retina()
         .on('error', done)
         .on('data', function(file) {
-          String(file.contents).should.equal(fs.readFileSync(expected));
+          String(file.contents).should.equal(String(fs.readFileSync(expected)));
 
           done();
         })
         .write(new gutil.File({
-          path: fixture
-          contents: fs.readFileSync(fixture);
+          path: fixture,
+          contents: fs.readFileSync(fixture)
         }));
     });
 
